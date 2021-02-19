@@ -1,0 +1,6 @@
+# Listing all open ports in a container
+
+for i in $(cat /proc/net/{tcp,udp} | cut -d ":" -f3 | awk {print } | tail -n +2); do
+# convertion from hex to int
+echo $((0x${i}))
+done
