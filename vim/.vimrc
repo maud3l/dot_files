@@ -83,10 +83,12 @@ vnoremap <C-y> "+yy
 nnoremap <C-p> "+p
 vnoremap <C-p> "+p
 
+
 " the following key binding lets you move lines up and down with Shift+arrow
 nnoremap <C-Down> :m+<CR>
 nnoremap <C-Up> :m-2<CR>
 inoremap <C-Up> <Esc>:CR>
+
 nnoremap tl   :tabnext<CR>
 nnoremap th   :tabprev<CR>
 nnoremap tk   :tablast<CR>
@@ -95,6 +97,7 @@ nnoremap tn   :tabnext<Space>
 nnoremap tm   :tabm<Space>
 nnoremap td   :tabclose<CR>
 nnoremap tN   :tabnew<CR>
+
 " git fugitive
 nmap <leader>gs :Gstatus<cr>
 nmap <leader>gc :Gcommit<cr>
@@ -135,6 +138,10 @@ nmap <leader>mk :LivedownToggle<CR>
 " NERDTree
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <leader>n :NERDTreeFocus<CR>
+
+" Remove highlight
+nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -203,6 +210,7 @@ Plug 'dense-analysis/ale'
 Plug 'tpope/vim-commentary'
 Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}
 Plug 'vim-airline/vim-airline-themes'
+Plug 'mtth/scratch.vim'
 
 call plug#end()
 
