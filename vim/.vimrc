@@ -147,7 +147,6 @@ let g:neoterm_autoscroll = 1      " autoscroll to the bottom when entering inser
 let g:neoterm_fixedsize = 1       " fixed size. The autosizing was wonky for me
 let g:neoterm_keep_term_open = 0  " when buffer closes, exit the terminal too.
 " https://github.com/kassio/neoterm/issues/148
-command! -nargs=+ TT Topen | T <args>
 
 function! OpenTermV(...)
   let g:neoterm_size = 40
