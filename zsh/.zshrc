@@ -12,7 +12,15 @@ export EDITOR='vim'
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
-ZSH_THEME="pygmalion"
+#ZSH_THEME="pygmalion"
+ZSH_THEME="spaceship"
+
+# Spaceship configuration
+SPACESHIP_PROMPT_ADD_NEWLINE="false"
+SPACESHIP_PROMPT_SEPARATE_LINE="false"
+SPACESHIP_EXIT_CODE_SHOW="true"
+SPACESHIP_EXEC_TIME_SHOW="false"
+
 
 # use vim key bindings
 # bindkey -vi
@@ -113,12 +121,8 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # go path
 export PATH=$PATH:/usr/local/go/bin
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
+# aliases
+alias ip='ip --color=auto'
 alias bc="bc -lq"
 alias :q="exit"
 alias :q!="exit"
@@ -152,6 +156,18 @@ alias k='kubectl'
 alias v='vim'
 # buku
 alias b='buku --suggest'
+# task warrior
+alias t='task'
+alias tin='t in'
+alias in='task add +in'
+tickle () {
+    deadline=$1
+    shift
+    in +tickle wait:$deadline $@
+}
+alias tick=tickle
+alias think='tickle +1d'
+
 
 bindkey -v
 bindkey ‘^R’ history-incremental-search-backward
@@ -253,6 +269,15 @@ newest() {
         find . -type f \( ! -regex '.*/\..*' \) -print0 | xargs -0 stat -c "%Y:%n" | sort -n| tail -n $1 | cut -d ':' -f2-
     fi
 }
+
+#Serve the current directory with Python's SimpleHTTPServer.
+serve() {
+  local port=0
+  local ip=$(hostname -I | awk '{print $1}')
+  echo "Serving on ${ip}:${port} ..."
+  python -m http.server ${port}
+}
+
 
 
 # Kubernetes

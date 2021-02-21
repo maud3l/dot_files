@@ -1,5 +1,5 @@
 " .vimrc
-
+:
 """General
 set encoding=utf-8 " The encoding displayed
 set fileencoding=utf-8 " The encoding written to file
@@ -41,16 +41,6 @@ let &t_TE = ""
 
 """Keymappings
 
-"don't use arrowkeys
-"noremap <Up> <NOP>
-"noremap <Down> <NOP>
-"noremap <Left> <NOP>
-"noremap <Right> <NOP>
-"inoremap <Up> <NOP>
-"inoremap <Down> <NOP>
-"inoremap <Left> <NOP>
-"inoremap <Right> <NOP>
-
 "save with WW
 nnoremap WW :w<cr>
 
@@ -83,11 +73,19 @@ vnoremap <C-y> "+yy
 nnoremap <C-p> "+p
 vnoremap <C-p> "+p
 
-
-" the following key binding lets you move lines up and down with Shift+arrow
-nnoremap <C-Down> :m+<CR>
-nnoremap <C-Up> :m-2<CR>
-inoremap <C-Up> <Esc>:CR>
+" move down with Alt+j and move up with Alt-k
+" https://vi.stackexchange.com/questions/2350/how-to-map-alt-key
+execute "set <M-j>=\ej"
+nnoremap <M-j> j
+execute "set <M-k>=\ek"
+nnoremap <M-k> k
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+" move in visual mode
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
 
 nnoremap tl   :tabnext<CR>
 nnoremap th   :tabprev<CR>
@@ -141,6 +139,33 @@ nnoremap <leader>n :NERDTreeFocus<CR>
 
 " Remove highlight
 nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
+
+" Neoterm
+" https://austeretechnology.wordpress.com/2017/07/18/a-ruby-repl-workflow-with-neovim-and-neoterm/
+" https://bernheisel.com/blog/vim-workflow
+let g:neoterm_autoscroll = 1      " autoscroll to the bottom when entering insert mode
+let g:neoterm_fixedsize = 1       " fixed size. The autosizing was wonky for me
+let g:neoterm_keep_term_open = 0  " when buffer closes, exit the terminal too.
+" https://github.com/kassio/neoterm/issues/148
+command! -nargs=+ TT Topen | T <args>
+
+function! OpenTermV(...)
+  let g:neoterm_size = 40
+  let l:cmd = a:1 == '' ? 'pwd' : a:1
+  execute 'belowright T '.l:cmd
+endfunction
+
+
+function! OpenTermH(...)
+  let g:neoterm_size = 80
+  let l:cmd = a:1 == '' ? 'pwd' : a:1
+  execute 'vert T '.l:cmd
+endfunction
+
+command! -nargs=? VT call OpenTermV(<q-args>)
+nnoremap VT :VT<space>
+command! -nargs=? HT call OpenTermH(<q-args>)
+nnoremap HT :HT<space>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -201,16 +226,20 @@ Plug 'airblade/vim-gitgutter'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-eunuch'
 Plug 'Yggdroot/indentLine'
 Plug 'unblevable/quick-scope'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'liuchengxu/space-vim-dark'
 Plug 'shime/vim-livedown'
 Plug 'dense-analysis/ale'
-Plug 'tpope/vim-commentary'
 Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}
 Plug 'vim-airline/vim-airline-themes'
 Plug 'mtth/scratch.vim'
+Plug 'kassio/neoterm'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 call plug#end()
 
@@ -231,6 +260,8 @@ let g:airline#extensions#tabline#tab_nr_type = 1
 let g:fzf_tags_command = 'ctags -R --exclude=.git --exclude=docs --exclude=.venv'
 let g:syntastic_c_compiler_options = "-std=gnu11 -g -Wall -Wextra -fPIC -I /usr/include -Isrc/ -Isrc/include/"
 let g:gitgutter_terminal_reports_focus=0
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Coc
 "-------------------------------------
@@ -259,6 +290,8 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 "command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport') " use `:OR` for organize import of current buffer
 "autocmd BufWritePre *.go :OR
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 "Ale
 
 let g:ale_linters = {
@@ -286,8 +319,14 @@ function! LinterStatus() abort
         \)
 endfunction
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" statusline
 set statusline=
 set statusline+=%m
 set statusline+=\ %f
 set statusline+=%=
 set statusline+=\ %{LinterStatus()}
+set statusline+=\|\ %{coc#status()}
+set statusline+=%{&paste?'\ \ \|\ PASTE\ ':'\ '}
+set statusline+=%=\ %{&fileformat}\ \|\ %{&fileencoding}\ \|\ %{&filetype}\ \|\ %l/%L\(%c\)\
