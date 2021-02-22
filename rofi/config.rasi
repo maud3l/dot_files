@@ -1,0 +1,15 @@
+/** Basic config file **/
+
+configuration {
+  combi-modi: "window,drun,ssh,run";
+  show-icons:         true;
+  icon-theme:         "Papirus";
+  theme: "/usr/share/rofi/themes/oxide.rasi";
+  width: 1000;
+  lines: 30;
+  sidebar-mode: true;
+  matching: "fuzzy";
+  font: "JetBrains Mono NL 12";
+  terminal: "kitty";
+  case-sensitive: false;
+}
