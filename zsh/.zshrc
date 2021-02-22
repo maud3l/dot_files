@@ -270,15 +270,11 @@ newest() {
     fi
 }
 
-#Serve the current directory with Python's SimpleHTTPServer.
+#Serve the current directory with Python's http.server.
+# port "0" is a unix wildcard for any unallocated port.
 serve() {
-  local port=0
-  local ip=$(hostname -I | awk '{print $1}')
-  echo "Serving on ${ip}:${port} ..."
-  python -m http.server ${port}
+  python -m http.server 0
 }
-
-
 
 # Kubernetes
 #[[ /usr/bin/kubectl ]] && source <(kubectl completion zsh)

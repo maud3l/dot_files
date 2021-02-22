@@ -11,6 +11,7 @@ set cursorline " Find the current line quickly
 set ruler
 set nocompatible
 set ignorecase
+set wildignorecase
 set showmatch
 set splitright
 set guicursor=
@@ -66,7 +67,6 @@ inoremap { {}<Left>
 inoremap [ []<Left>
 inoremap " ""<Left>
 
-
 " copy and paste to/from vim and the clipboard
 nnoremap <C-y> "+yy
 vnoremap <C-y> "+yy
@@ -87,6 +87,7 @@ inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
 
+" tab
 nnoremap tl   :tabnext<CR>
 nnoremap th   :tabprev<CR>
 nnoremap tk   :tablast<CR>
@@ -95,6 +96,11 @@ nnoremap tn   :tabnext<Space>
 nnoremap tm   :tabm<Space>
 nnoremap td   :tabclose<CR>
 nnoremap tN   :tabnew<CR>
+
+" buffers
+map bn :bn<cr>
+map bp :bp<cr>
+map bd :bd<cr>
 
 " git fugitive
 nmap <leader>gs :Gstatus<cr>
@@ -166,6 +172,8 @@ nnoremap VT :VT<space>
 command! -nargs=? HT call OpenTermH(<q-args>)
 nnoremap HT :HT<space>
 
+"https://vi.stackexchange.com/questions/7258/how-do-i-prevent-vim-from-hiding-symbols-in-markdown-and-json
+let g:indentLine_setConceal = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -239,6 +247,7 @@ Plug 'mtth/scratch.vim'
 Plug 'kassio/neoterm'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
@@ -285,6 +294,17 @@ autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" use <tab> for trigger completion and navigate to the next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
 
 "command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport') " use `:OR` for organize import of current buffer
 "autocmd BufWritePre *.go :OR
