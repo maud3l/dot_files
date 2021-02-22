@@ -239,7 +239,7 @@ client.background       #F8F8F2
 bar {
         status_command i3blocks
         i3bar_command i3bar
-        font pango: SauceCodePro Nerd Font 11
+        font pango: JetBrains Mono NL 11
         colors {
                 background #282A36
                 statusline #F8F8F2
