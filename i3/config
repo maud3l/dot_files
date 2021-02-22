@@ -58,9 +58,8 @@ exec --no-startup-id /usr/bin/dunst -config .config/dunst/dunstrc
 exec --no-startup-id /usr/bin/deluged
 exec --no-startup-id /usr/bin/deluge-gtk
 
-# firefox
-#exec --no-startup-id /usr/bin/firefox
-exec --no-startup-id i3-msg 'workspace 1; exec /usr/bin/firefox'
+# brave
+exec --no-startup-id i3-msg 'workspace 1; exec /usr/bin/brave-browser'
 
 # star valume at 100%
 exec --no-startup-id /usr/bin/pactl set-sink-volume 0 100%
@@ -237,6 +236,7 @@ client.background       #F8F8F2
 
 
 bar {
+        position bottom
         status_command i3blocks
         i3bar_command i3bar
         font pango: JetBrains Mono NL 11

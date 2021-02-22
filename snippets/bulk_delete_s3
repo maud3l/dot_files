@@ -1,6 +1,0 @@
-# Delete all s3 buckets with certian prefix/suffix using regex
-# In this example it will delete all files ending with `-redis-backup`
-
-for i in $(aws s3 ls | grep "*-redis-backup" | awk '{print $3}'); do
-    aws s3 rb s3//$i
-done
