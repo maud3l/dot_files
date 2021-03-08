@@ -242,7 +242,6 @@ Plug 'liuchengxu/space-vim-dark'
 Plug 'shime/vim-livedown'
 Plug 'dense-analysis/ale'
 Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}
-Plug 'vim-airline/vim-airline-themes'
 Plug 'mtth/scratch.vim'
 Plug 'kassio/neoterm'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }

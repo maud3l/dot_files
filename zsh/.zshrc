@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
 
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -11,8 +18,6 @@ export EDITOR='vim'
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-#ZSH_THEME="robbyrussell"
-#ZSH_THEME="pygmalion"
 ZSH_THEME="spaceship"
 
 # Spaceship configuration
@@ -90,6 +95,7 @@ plugins=(
 
 autoload -U compinit && compinit
 
+export RPS1="%{$reset_color%}"
 source $ZSH/oh-my-zsh.sh
 
 # source env file
@@ -160,6 +166,7 @@ alias b='buku --suggest'
 alias t='task'
 alias tin='t in'
 alias in='task add +in'
+alias td='task done'
 tickle () {
     deadline=$1
     shift
@@ -276,6 +283,17 @@ serve() {
   python -m http.server 0
 }
 
+function check_last_exit_code() {
+  local LAST_EXIT_CODE=$?
+  if [[ $LAST_EXIT_CODE -ne 0 ]]; then
+    local EXIT_CODE_PROMPT=' '
+    EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
+    EXIT_CODE_PROMPT+="%{$fg_bold[red]%}$LAST_EXIT_CODE%{$reset_color%}"
+    EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
+    echo "$EXIT_CODE_PROMPT"
+  fi
+}
+
 # Kubernetes
 #[[ /usr/bin/kubectl ]] && source <(kubectl completion zsh)
 
@@ -283,7 +301,12 @@ serve() {
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kube-ps1
 source $HOME/.oh-my-zsh/kube-ps1/kube-ps1.sh
 PROMPT='$(kube_ps1)'$PROMPT
+RPROMPT=$RPROMPT'$(check_last_exit_code)'
 
 get_cluster_short() {
  echo "$1"
 }
+. "/home/mauro/.acme.sh/acme.sh.env"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
